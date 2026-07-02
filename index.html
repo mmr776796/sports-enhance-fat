@@ -21,8 +21,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:transparent;color:var(--ink);overflow:hidden;height:100vh;-webkit-font-smoothing:antialiased}
-#kg{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);cursor:grab}
-#kg:active{cursor:grabbing}
+#kg{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);display:flex;align-items:center;justify-content:center}
 #kg svg{width:100%;height:100%}
 svg text{font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
 
@@ -99,10 +98,10 @@ exercises.forEach(function(ex,i){
 
 // ═══ D3 ═══
 var container=document.getElementById('kg');
-var W=container.clientWidth||window.innerWidth, H=container.clientHeight||window.innerHeight;
-
+var graphExtent=250;
 var svg=d3.select('#kg').append('svg').attr('width','100%').attr('height','100%')
-  .attr('viewBox',[-W/2,-H/2,W,H]);
+  .attr('viewBox',[-graphExtent,-graphExtent,graphExtent*2,graphExtent*2])
+  .attr('preserveAspectRatio','xMidYMid meet');
 var g=svg.append('g');
 
 // Outer ring
@@ -160,16 +159,15 @@ function show(evt,d){
 function hide(){tt.classList.remove('on')}
 nodeG.on('mouseenter',show).on('mouseleave',hide);
 
-// ═══ ZOOM ═══
-var zoom=d3.zoom().scaleExtent([0.3,4]).on('zoom',function(evt){g.attr('transform',evt.transform)});
-svg.call(zoom);svg.call(zoom.transform,d3.zoomIdentity.translate(W/2,H/2));
+// ═══ ZOOM (scale only, no pan) ═══
+var zoom=d3.zoom().scaleExtent([0.3,4]).translateExtent([[0,0],[0,0]]).on('zoom',function(evt){g.attr('transform',evt.transform)});
+svg.call(zoom);
 document.getElementById('zin').onclick=function(){svg.transition().duration(300).call(zoom.scaleBy,1.4)};
 document.getElementById('zout').onclick=function(){svg.transition().duration(300).call(zoom.scaleBy,0.7)};
-document.getElementById('zfit').onclick=function(){svg.transition().duration(500).call(zoom.transform,d3.zoomIdentity.translate(W/2,H/2))};
+document.getElementById('zfit').onclick=function(){svg.transition().duration(500).call(zoom.transform,d3.zoomIdentity)};
 
 window.addEventListener('resize',function(){
-  W=container.clientWidth||window.innerWidth; H=container.clientHeight||window.innerHeight;
-  svg.attr('viewBox',[-W/2,-H/2,W,H]);
+  svg.attr('viewBox',[-graphExtent,-graphExtent,graphExtent*2,graphExtent*2]);
 });
 
 }catch(e){

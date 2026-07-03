@@ -3,11 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="refresh" content="0; url=./运动改善肥胖原理/">
-<link rel="canonical" href="https://mmr776796.github.io/sports-enhance-fat/运动改善肥胖原理/">
-<title>正在跳转到最新页面</title>
+<title>"小胖墩"运动干预的科学密码</title>
 <style>
-<<<<<<< HEAD
 :root {
   --bg:transparent; --pg:transparent; --ink:#1a1a1a; --ik2:#545350; --ik3:#827f7a;
   --gl:#d5d4cf; --ax:#c5c4be; --bd:rgba(0,0,0,0.06);
@@ -24,7 +21,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:transparent;color:var(--ink);overflow:hidden;height:100vh;-webkit-font-smoothing:antialiased}
-#kg{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);display:flex;align-items:center;justify-content:center}
+#kg{position:fixed;top:0;left:0;right:0;bottom:0;background:transparent;display:flex;align-items:center;justify-content:center}
 #kg svg{width:100%;height:100%}
 svg text{font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
 
@@ -44,10 +41,6 @@ svg text{font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",san
 <body>
 <div id="kg"></div>
 <div class="tt" id="tt"></div>
-<div class="ctr">
-  <button id="zin">+</button><button id="zout">-</button><button id="zfit">&#8634;</button>
-</div>
-
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <script>
 window.addEventListener('DOMContentLoaded',function(){
@@ -61,27 +54,22 @@ var exercises=[
    md_bmi:-1.74,md_bf:-2.58,sig_bmi:true,sig_bf:true,
    dose:'每周 3–6 次，每次 30–90 分钟',period:'8–24 周',
    desc:'持续中等强度有氧运动，处于脂肪氧化效率最高的强度区间，总能量消耗大且依从性好。'},
-
   {id:'HIIT',name:'高强度间歇训练',sk:'s2',
    md_bmi:-1.44,md_bf:-2.48,sig_bmi:true,sig_bf:true,
    dose:'每周 2–3 次，每次 5–30 分钟',period:'4–16 周',
    desc:'短时间高强度爆发配合间歇恢复，产生运动后过量氧耗效应，用较少训练时间获得接近 MICT 的改善效果。'},
-
   {id:'CT',name:'有氧-抗阻结合训练',sk:'s3',
    md_bmi:-1.04,md_bf:-3.00,sig_bmi:true,sig_bf:true,
    dose:'每周 2–5 次，每次 45–60 分钟',period:'8–24 周',
    desc:'有氧运动消耗热量，抗阻训练增加瘦体重并提升静息代谢率，两者协同使体脂百分比降幅最大。'},
-
   {id:'MVAE',name:'中高强度有氧运动',sk:'s4',
    md_bmi:-0.95,md_bf:-2.19,sig_bmi:true,sig_bf:true,
    dose:'每周 3–5 次，每次 30–60 分钟',period:'8–16 周',
    desc:'在有氧基础上提升运动强度，单位时间能量消耗更高，对 BMI 和体脂均有显著改善。'},
-
   {id:'MCE',name:'复合运动方案',sk:'s6',
    md_bmi:null,md_bf:-1.85,sig_bmi:false,sig_bf:true,
    dose:'每周 2–4 次，每次 40–60 分钟',period:'8–16 周',
    desc:'融合多种运动模式，趣味性和参与度高，对体脂百分比有显著改善，适合长期坚持。'},
-
   {id:'RT',name:'抗阻训练',sk:'s5',
    md_bmi:-0.83,md_bf:-2.68,sig_bmi:true,sig_bf:true,
    dose:'每周 2–3 次，每次 30–60 分钟',period:'8–20 周',
@@ -92,7 +80,6 @@ var N=exercises.length;
 var CX=0, CY=0;
 var Rc=42, R_ex=120;
 
-// Position nodes evenly
 var startAng=-Math.PI/2;
 exercises.forEach(function(ex,i){
   ex.angle=startAng+i*(2*Math.PI/N);
@@ -101,9 +88,7 @@ exercises.forEach(function(ex,i){
   ex.r=24;
 });
 
-// ═══ D3 ═══
-var container=document.getElementById('kg');
-var graphExtent=220;
+var graphExtent=200;
 var svg=d3.select('#kg').append('svg').attr('width','100%').attr('height','100%')
   .attr('viewBox',[-graphExtent,-graphExtent,graphExtent*2,graphExtent*2])
   .attr('preserveAspectRatio','xMidYMid meet');
@@ -141,7 +126,7 @@ nodeG.append('text').text(function(d){return d.name})
   .attr('text-anchor','middle').attr('dy',function(d){return d.r+15})
   .attr('fill',C('ik2')).attr('font-size',11);
 
-// ═══ TOOLTIP ═══
+// Tooltip
 var tt=document.getElementById('tt');
 function show(evt,d){
   var bmiT=d.md_bmi!=null?d.md_bmi.toFixed(2)+' kg/m²':'未评估';
@@ -159,12 +144,6 @@ function show(evt,d){
 function hide(){tt.classList.remove('on')}
 nodeG.on('mouseenter',show).on('mouseleave',hide);
 
-// ═══ ZOOM (scale only, no pan) ═══
-var zoom=d3.zoom().scaleExtent([0.3,4]).translateExtent([[0,0],[0,0]]).on('zoom',function(evt){g.attr('transform',evt.transform)});
-svg.call(zoom);
-document.getElementById('zin').onclick=function(){svg.transition().duration(300).call(zoom.scaleBy,1.4)};
-document.getElementById('zout').onclick=function(){svg.transition().duration(300).call(zoom.scaleBy,0.7)};
-document.getElementById('zfit').onclick=function(){svg.transition().duration(500).call(zoom.transform,d3.zoomIdentity)};
 
 window.addEventListener('resize',function(){
   svg.attr('viewBox',[-graphExtent,-graphExtent,graphExtent*2,graphExtent*2]);
@@ -175,20 +154,5 @@ window.addEventListener('resize',function(){
 }
 });
 </script>
-=======
-  :root{color-scheme:light dark;}
-  body{margin:0;font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:#f4f2eb;color:#1f1f1f;display:grid;place-items:center;min-height:100vh;}
-  main{padding:24px 28px;border-radius:16px;background:rgba(255,255,255,0.8);box-shadow:0 10px 30px rgba(0,0,0,0.08);text-align:center;max-width:480px;}
-  a{display:inline-block;margin-top:16px;padding:10px 16px;border-radius:999px;background:#4a3aa7;color:#fff;text-decoration:none;}
-</style>
-</head>
-<body>
-  <main>
-    <h1>正在跳转到最新页面…</h1>
-    <p>如果页面没有自动跳转，请点击下面的按钮进入最新内容。</p>
-    <a href="./运动改善肥胖原理/">立即查看最新网页</a>
-  </main>
-  <script>window.location.replace('./运动改善肥胖原理/');</script>
->>>>>>> 3f31ee8 (Add deploy script and update README with deployment instructions)
 </body>
 </html>
